@@ -74,6 +74,8 @@ def create_seg_model():
     return model
 @torch.no_grad()
 def get_styled_image(style_model, image):
+    print("\nget_styled_image image -> type: ", type(image), " shape: ", image.shape, "\n")
+
     styled = style_model(image)
 
     # make same size
@@ -146,20 +148,26 @@ def get_semseg_image(model, image):
 
 @torch.no_grad()
 def get_masked_image(model, image, category, bg=0):
+    print("get_masked_image image in -> type: ", type(image), " shape: ", image.shape, "\n")
     with torch.no_grad():
         input_var = Variable(torch.FloatTensor(image.copy())).cuda()
 
     output = model(input_var)
+    print("output 1 -> type: ", type(output), " shape: ", output.shape, "\n")
     torch.cuda.synchronize()
     output = output.cpu().data[0].numpy()
+    print("output 2 -> type: ", type(output), " shape: ", output.shape, "\n")
     output = output.transpose(1, 2, 0)
+    print("output 3 -> type: ", type(output), " shape: ", output.shape, "\n")
     output = np.asarray(np.argmax(output, axis=2), dtype=np.uint8)
+    print("output 4 -> type: ", type(output), " shape: ", output.shape, "\n")
 
     bin_mask = ((output == category)).astype('uint8')
     if bg:
         bin_mask = 1 - bin_mask
 
     image_original = denorm(image)
+    print("image_original -> type: ", type(image_original), " shape: ", image_original.shape, "\n")
     masked = bin_mask[:, :, None] * image_original
     # image = Image.fromarray(masked.astype('uint8'))
 
