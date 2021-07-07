@@ -119,7 +119,7 @@ def load_image(fname):
     image = cv2.imread(fname, cv2.IMREAD_COLOR)
     image = np.asarray(image, np.float32)
     size = image.shape
-    mean = np.array([72.3924  , 82.90902 , 73.158325])
+    mean = np.array([0.485, 0.456, 0.406])
     image -= mean
     # image = image.astype(np.float32) / 255.0
     image = image[:, :, ::-1]  # change to RGB
@@ -129,7 +129,7 @@ def load_image(fname):
 
 
 def denorm(image):
-    mean = np.array([72.3924, 82.90902, 73.158325])
+    mean = np.array([0.485, 0.456, 0.406])
     image_original = (f2l(image[0])[:, :, ::-1] + mean)[:, :, ::-1]
     return image_original
 
