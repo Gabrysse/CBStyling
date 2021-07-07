@@ -51,12 +51,12 @@ def main(img_fname, out_fname, style_id, class_id):
     # Save part
     # ut.save_image(out_fname, fg_styled + bg_image)
 
-    self.to_tensor = transforms.Compose([
+    to_tensor = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
 
-    img = self.to_tensor(fg_styled + bg_image).float()
+    img = to_tensor(fg_styled + bg_image).float()
 
     img = transforms.ToPILImage()(img)
     img.save("prova.png")
